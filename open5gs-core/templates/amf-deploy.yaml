@@ -53,7 +53,12 @@ spec:
         - name: amf
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
-          command: ["open5gs-amfd", "-c", "/open5gs/config-map/amf.yaml"]
+          securityContext:
+            privileged: true          
+          command: ["/bin/sh", "-c"]
+          args:
+          - ip r add 192.168.1.0/24 via 192.168.70.1;
+            open5gs-amfd -c /open5gs/config-map/amfd.yaml;
           volumeMounts:
           - name: {{ .Release.Name }}-amf-config
             mountPath: /open5gs/config-map/amf.yaml

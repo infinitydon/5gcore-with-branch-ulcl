@@ -47,6 +47,7 @@ spec:
             ip link set ogstun up;
             sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward";
             iptables -t nat -A POSTROUTING -s 10.45.0.0/16 ! -o ogstun -j MASQUERADE;
+            ip r add 192.168.1.0/24 via 192.168.70.1;
             open5gs-upfd -c /open5gs/config-map/upf.yaml;
           volumeMounts:
           - name: {{ .Release.Name }}-upf-config
